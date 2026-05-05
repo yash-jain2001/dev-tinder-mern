@@ -26,7 +26,7 @@ userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
       data: connectionRequests,
     });
   } catch (err) {
-    res.status(400).sned("ERROR: " + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
@@ -83,7 +83,8 @@ userRouter.get("/feed", userAuth, async(req,res)=>{
       ]
     }).select("firstName lastName age gender profilePicture skills about").skip((page-1)*limit).limit(limit)
 
-res.send(users)
+     res.json({ data: users });
+
   }catch(err){
     res.status(400).send("ERROR: " + err.message)
   }
