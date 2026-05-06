@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "axios"   .;
 import React, { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -64,7 +64,7 @@ const Connections = () => {
                   <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-success rounded-full border-4 border-base-100 shadow-lg"></div>
                 </div>
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-bold text-white group-hover:text-primary transition-colors">
+                  <h2 className="text-2xl font-bold text-white group-hover:text-primary transition-colors ">
                     {firstName} {lastName}
                   </h2>
                   <div className="flex gap-2">
