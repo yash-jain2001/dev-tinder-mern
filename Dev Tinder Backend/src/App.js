@@ -9,10 +9,11 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const cors = require("cors");
+const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config");
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: FRONTEND_URL,
     credentials: true,
   }),
 );
@@ -31,8 +32,8 @@ app.get("/", (req, res) => {
 connectDB() 
   .then(() => {
     console.log("Database connected");
-    if (process.env.NODE_ENV !== "production") {
-      const port = process.env.PORT || 3000;
+    if (NODE_ENV !== "production") {
+      const port = PORT;
       app.listen(port, () => {
         console.log(`Server started on port ${port}`);
       });
