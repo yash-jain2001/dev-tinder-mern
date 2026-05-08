@@ -1,16 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/database.js");
-const User = require("./models/user");
+const User = require("./models/user.js");
 const app = express();
 const cookieParser = require("cookie-parser");
-const authRouter = require("./routes/auth");
-const profileRouter = require("./routes/profile");
-const requestRouter = require("./routes/request");
-const userRouter = require("./routes/user");
+const authRouter = require("./routes/auth.js");
+const profileRouter = require("./routes/profile.js");
+const requestRouter = require("./routes/request.js");
+const userRouter = require("./routes/user.js");
 const cors = require("cors");
-const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config");
-const cron = require("./utils/cronJob");
+const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config.js");
+const cron = require("./utils/cronJob.js");
 
 app.use(
   cors({
