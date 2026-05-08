@@ -33,12 +33,10 @@ app.get("/", (req, res) => {
 connectDB() 
   .then(() => {
     console.log("Database connected");
-    if (NODE_ENV !== "production") {
-      const port = PORT;
-      app.listen(port, () => {
-        console.log(`Server started on port ${port}`);
-      });
-    }
+    const port = PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server started on port ${port}`);
+    });
   })
   .catch((err) => {
     console.log("db not connected", err);
