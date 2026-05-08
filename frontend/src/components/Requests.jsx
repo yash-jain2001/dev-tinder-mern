@@ -35,12 +35,16 @@ const reviewRequest = async(status,_id)=>{
     fetchRequests();
   }, []);
 
-  if (!requests) return null;
+  if (requests === null) return (
+    <div className="flex justify-center items-center min-h-[60vh]">
+      <span className="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  );
 
   if (requests.length === 0)
     return (
-      <div className="text-2xl font-bold text-center ml-4 mt-4">
-        No Requests found
+      <div className="text-2xl font-bold text-center text-white/20 mt-20 animate-in fade-in duration-1000">
+        No pending requests found
       </div>
     );
 
@@ -55,6 +59,8 @@ const reviewRequest = async(status,_id)=>{
 
       <div className="grid gap-4">
         {requests.map((request) => {
+          if (!request.fromUserId) return null;
+          
           const {
             firstName,
             lastName,
