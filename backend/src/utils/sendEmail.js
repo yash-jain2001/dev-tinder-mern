@@ -5,13 +5,17 @@ const sendEmail = async (toEmail, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465,
-      secure: true, // Use SSL
+      port: 587,
+      secure: false, // Use STARTTLS
       auth: {
         user: GMAIL_USER,
         pass: GMAIL_PASS,
       },
     });
+
+    // Verify connection configuration
+    await transporter.verify();
+    console.log("Mail server connection verified");
 
     const mailOptions = {
       from: GMAIL_USER,
