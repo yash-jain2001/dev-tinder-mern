@@ -11,6 +11,7 @@ const userRouter = require("./routes/user.js");
 const cors = require("cors");
 const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config.js");
 const cron = require("./utils/cronJob.js");
+const sendEmail = require("./utils/sendEmail.js");
 
 app.use(
   cors({
@@ -55,6 +56,17 @@ connectDB()
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });
+
+    // Test Email Connection on Startup
+    const nodemailer = require("nodemailer");
+    const { GMAIL_USER, GMAIL_PASS } = require("./config/config.js");
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user: GMAIL_USER, pass: GMAIL_PASS },
+    });
+    transporter.verify()
+      .then(() => console.log("✅ Email Server: Ready to send emails"))
+      .catch((err) => console.error("❌ Email Server Error:", err.message));
   })
   .catch((err) => {
     console.log("db not connected", err);
