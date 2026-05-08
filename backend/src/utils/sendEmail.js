@@ -2,6 +2,11 @@ const nodemailer = require("nodemailer");
 const { GMAIL_USER, GMAIL_PASS } = require("../config/config");
 
 const sendEmail = async (toEmail, subject, text) => {
+  if (!GMAIL_USER || !GMAIL_PASS) {
+    console.error("EMAIL ERROR: GMAIL_USER or GMAIL_PASS is missing from environment variables!");
+    return;
+  }
+
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
