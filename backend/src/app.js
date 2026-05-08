@@ -58,15 +58,22 @@ connectDB()
     });
 
     // Test Email Connection on Startup
+    console.log("🔍 Email Server: Starting connection test...");
     const nodemailer = require("nodemailer");
     const { GMAIL_USER, GMAIL_PASS } = require("./config/config.js");
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: GMAIL_USER, pass: GMAIL_PASS },
-    });
-    transporter.verify()
-      .then(() => console.log("✅ Email Server: Ready to send emails"))
-      .catch((err) => console.error("❌ Email Server Error:", err.message));
+    
+    if (!GMAIL_USER || !GMAIL_PASS) {
+      console.error("❌ Email Server Error: GMAIL_USER or GMAIL_PASS is undefined in config!");
+    } else {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: GMAIL_USER, pass: GMAIL_PASS },
+        connectionTimeout: 10000, // 10 seconds
+      });
+      transporter.verify()
+        .then(() => console.log("✅ Email Server: Ready to send emails"))
+        .catch((err) => console.error("❌ Email Server Error:", err.message));
+    }
   })
   .catch((err) => {
     console.log("db not connected", err);
