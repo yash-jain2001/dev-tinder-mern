@@ -14,8 +14,23 @@ const cron = require("./utils/cronJob.js");
 
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        FRONTEND_URL,
+        "http://localhost:5173",
+        "http://localhost:3000",
+      ];
+      // Allow requests with no origin (like mobile apps or curl) 
+      // or if the origin is in our allowed list or is a vercel subdomain
+      if (!origin || allowedOrigins.includes(origin) || (origin && origin.includes("vercel.app"))) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());
