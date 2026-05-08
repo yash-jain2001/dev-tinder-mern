@@ -9,10 +9,12 @@ const profileRouter = require("./routes/profile.js");
 const requestRouter = require("./routes/request.js");
 const userRouter = require("./routes/user.js");
 const cors = require("cors");
+const compression = require("compression");
 const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config.js");
 const cron = require("./utils/cronJob.js");
 const sendEmail = require("./utils/sendEmail.js");
 
+app.use(compression());
 app.use(
   cors({
     origin: (origin, callback) => {
