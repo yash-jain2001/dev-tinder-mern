@@ -10,6 +10,7 @@ const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const cors = require("cors");
 const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config");
+const cron = require("./utils/cronJob");
 
 app.use(
   cors({

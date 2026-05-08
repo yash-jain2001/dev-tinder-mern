@@ -3,6 +3,7 @@ const requestRouter = express.Router();
 const { userAuth } = require("../middlewares/auth.js");
 const ConnectionRequest = require("../models/connectionRequest.js");
 const User = require("../models/user.js");
+const sendEmail = require("../utils/sendEmail.js");
 
 requestRouter.post(
   "/request/send/:status/:toUserId",
@@ -55,6 +56,18 @@ requestRouter.post(
       });
 
       const data = await connectionRequest.save();
+
+      // Send email if status is interested
+      if (status === "interested") {
+        const subject = `New Connection Request from ${req.user.firstName}`;
+        const text = `Hi ${toUser.firstName},\n\n${req.user.firstName} is interested in your profile and has sent you a connection request on Dev Tinder!\n\nLog in to your account to review the request.`;
+        
+        // We don't await this to avoid blocking the API response
+        sendEmail(toUser.email, subject, text).catch((err) =>
+          console.error("Failed to send email notification:", err)
+        );
+      }
+
       res.json({
         message: (status == "interested")? `${req.user.firstName} is sending connection request to ${toUser.firstName}'s profile` : `${req.user.firstName} is ignoring ${toUser.firstName}'s profile`,
         data,

@@ -4,6 +4,8 @@ const config = {
   JWT_SECRET: process.env.JWT_SECRET,
   FRONTEND_URL: process.env.FRONTEND_URL,
   NODE_ENV: process.env.NODE_ENV,
+  GMAIL_USER: process.env.GMAIL_USER,
+  GMAIL_PASS: process.env.GMAIL_PASS,
 };
 
 module.exports = config;

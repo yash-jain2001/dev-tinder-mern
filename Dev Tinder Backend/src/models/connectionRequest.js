@@ -5,12 +5,12 @@ const connectionRequestSchema = new mongoose.Schema(
     fromUserId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref:"User"     // creating reference to the User schema
+      ref: "User", // creating reference to the User schema
     },
     toUserId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref:"User"
+      ref: "User",
     },
     status: {
       type: String,
@@ -24,8 +24,11 @@ const connectionRequestSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
-connectionRequestSchema.index({fromUserId:1, toUserId:1});
+connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
 
-const ConnectionRequestModel = new mongoose.model("ConnectionRequest", connectionRequestSchema);
+const ConnectionRequestModel = new mongoose.model(
+  "ConnectionRequest",
+  connectionRequestSchema,
+);
 
 module.exports = ConnectionRequestModel;
