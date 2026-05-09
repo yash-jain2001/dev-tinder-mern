@@ -77,7 +77,11 @@ const Navbar = () => {
               <li>
                 <Link to="/requests" className="flex justify-between py-3 px-4 hover:bg-primary/10 rounded-lg transition-colors">
                   Requests
-                  <span className="badge badge-sm badge-primary">New</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/premium" className="flex justify-between py-3 px-4 hover:bg-primary/10 rounded-lg transition-colors">
+                  Premium
                 </Link>
               </li>
               <div className="divider my-1 opacity-20"></div>

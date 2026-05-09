@@ -11,8 +11,8 @@ const userRouter = require("./routes/user.js");
 const cors = require("cors");
 const compression = require("compression");
 const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config.js");
-const cron = require("./utils/cronJob.js");
-const sendEmail = require("./utils/sendEmail.js");
+const paymentRouter = require("./routes/payment.js");
+require("./utils/cronJob.js");
 
 app.use(compression());
 app.use(
@@ -45,7 +45,8 @@ app.use(cookieParser());
 app.use("/",authRouter);
 app.use("/",profileRouter);
 app.use("/",requestRouter);
-app.use("/", userRouter);
+app.use("/",userRouter);
+app.use("/",paymentRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
