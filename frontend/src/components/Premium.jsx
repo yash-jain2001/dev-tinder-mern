@@ -1,6 +1,16 @@
 import React from "react";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
 const Premium = () => {
+
+    const handleBuyClick = async(type)=>{
+        const order  = await axios.post(BASE_URL+"/payment/create",{membershipType:type},{ withCredentials: true})
+    }
+
+
+
+
   return (
     <div className="flex gap-10 justify-center py-10 min-h-screen">
       <div className="w-96 h-[450px] rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl shadow-gray-400/5 p-8 text-white">
@@ -16,8 +26,8 @@ const Premium = () => {
               <li>✓ 3 months subscription</li>
             </ul>
           </div>
-          <button className="w-full py-3 rounded-xl bg-gray-200 text-black font-semibold hover:bg-white transition">
-            Buy for $9.99
+          <button onClick={()=>handleBuyClick("silver")} className="w-full py-3 rounded-xl bg-gray-200 text-black font-semibold hover:bg-white transition">
+            Buy for Rs 199
           </button>
         </div>
       </div>
@@ -35,8 +45,8 @@ const Premium = () => {
               <li>✓ 6 months subscription</li>
             </ul>
           </div>
-          <button className="w-full py-3 rounded-xl bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition">
-            Buy for $19.99
+          <button onClick={()=>handleBuyClick("gold")} className="w-full py-3 rounded-xl bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition">
+            Buy for Rs 349
           </button>
         </div>
       </div>
