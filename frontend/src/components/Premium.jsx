@@ -3,13 +3,33 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 
 const Premium = () => {
+  const handleBuyClick = async (type) => {
+    const order = await axios.post(
+      BASE_URL + "/payment/create",
+      { membershipType: type },
+      { withCredentials: true },
+    );
+    console.log("Frontend received order data:", order.data);
 
-    const handleBuyClick = async(type)=>{
-        const order  = await axios.post(BASE_URL+"/payment/create",{membershipType:type},{ withCredentials: true})
-    }
-
-
-
+    const {amount,keyId, currency, notes, orderId} = order.data
+    const options = {
+        key: keyId, // Replace with your Razorpay key_id
+        amount,// Amount is in currency subunits.
+        currency,
+        name: 'Dev Tinder',
+        description: 'Dev Tinder Premium',
+        order_id:orderId, // This is the order_id created in the backend
+        prefill: {
+          name: notes.firstName + " " + notes.lastName,
+          email: notes.email,
+        },
+        theme: {
+          color: '#F37254'
+        },
+      };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
 
   return (
     <div className="flex gap-10 justify-center py-10 min-h-screen">
@@ -26,7 +46,10 @@ const Premium = () => {
               <li>✓ 3 months subscription</li>
             </ul>
           </div>
-          <button onClick={()=>handleBuyClick("silver")} className="w-full py-3 rounded-xl bg-gray-200 text-black font-semibold hover:bg-white transition">
+          <button
+            onClick={() => handleBuyClick("silver")}
+            className="w-full py-3 rounded-xl bg-gray-200 text-black font-semibold hover:bg-white transition"
+          >
             Buy for Rs 199
           </button>
         </div>
@@ -45,7 +68,10 @@ const Premium = () => {
               <li>✓ 6 months subscription</li>
             </ul>
           </div>
-          <button onClick={()=>handleBuyClick("gold")} className="w-full py-3 rounded-xl bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition">
+          <button
+            onClick={() => handleBuyClick("gold")}
+            className="w-full py-3 rounded-xl bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+          >
             Buy for Rs 349
           </button>
         </div>
