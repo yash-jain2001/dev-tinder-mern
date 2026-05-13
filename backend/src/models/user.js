@@ -56,6 +56,13 @@ const userSchema = new mongoose.Schema(
     profilePicture:{
       type:String,
       default:""
+    },
+    isPremium:{
+      type:Boolean,
+      default:false
+    },
+    membershipType:{
+      type:String,
     }
   },
   { timestamps: true },
