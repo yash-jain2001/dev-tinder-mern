@@ -19,7 +19,8 @@ userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
       "gender",
       "age",
       "email",
-      "about"
+      "about",
+      "isPremium"
     ]);
     res.json({
       message: `Connection Requests of ${loggedinUser.firstName} fetched successfully`,
@@ -39,7 +40,7 @@ userRouter.get("/user/myconnections", userAuth, async (req, res) => {
         {toUserId:loggedinUser._id, status:"accepted"},
         {fromUserId:loggedinUser._id, status:"accepted"}
       ]
-    }).populate("fromUserId", ["firstName", "lastName", "profilePicture", "gender", "age", "skills", "email","about"]).populate("toUserId", ["firstName", "lastName", "profilePicture", "gender", "age", "skills", "email", "about"]);
+    }).populate("fromUserId", ["firstName", "lastName", "profilePicture", "gender", "age", "skills", "email", "about", "isPremium"]).populate("toUserId", ["firstName", "lastName", "profilePicture", "gender", "age", "skills", "email", "about", "isPremium"]);
 
     const data = myConnections.map((connection)=>{
         if(connection.fromUserId._id.toString() === loggedinUser._id.toString()){
@@ -81,7 +82,7 @@ userRouter.get("/feed", userAuth, async(req,res)=>{
         {_id:{$nin: Array.from(hideUsersFromFeed)}},
         {_id:{$ne: loggedinUser._id}}
       ]
-    }).select("firstName lastName age gender profilePicture skills about").skip((page-1)*limit).limit(limit)
+    }).select("firstName lastName age gender profilePicture skills about isPremium").skip((page-1)*limit).limit(limit)
 
      res.json({ data: users });
 

@@ -49,15 +49,15 @@ const reviewRequest = async(status,_id)=>{
     );
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-8 px-4">
+    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 py-4 md:py-8 px-4">
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-black tracking-tight text-white bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
           Connection Requests
         </h1>
         <p className="text-white/50 text-sm">Review who wants to connect with you</p>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-4 md:gap-6">
         {requests.map((request) => {
           if (!request.fromUserId) return null;
           
@@ -70,10 +70,10 @@ const reviewRequest = async(status,_id)=>{
             skills
           } = request.fromUserId;
           return (
-            <div key={request._id} className="glass-card p-6 rounded-3xl flex flex-col md:flex-row items-center gap-6 transition-all duration-300 hover:bg-white/10 group animate-in slide-in-from-bottom-4">
-              <div className="relative">
+            <div key={request._id} className="glass-card p-5 md:p-6 rounded-3xl flex flex-col md:flex-row items-center gap-4 md:gap-6 transition-all duration-300 hover:bg-white/10 group animate-in slide-in-from-bottom-4">
+              <div className="relative shrink-0">
                 <div className="avatar">
-                  <div className="w-24 h-24 rounded-2xl ring ring-primary/20 ring-offset-base-100 ring-offset-2">
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl ring ring-primary/20 ring-offset-base-100 ring-offset-2">
                     <img src={profilePicture || "https://ui-avatars.com/api/?name=" + firstName} alt={firstName} />
                   </div>
                 </div>
@@ -82,35 +82,42 @@ const reviewRequest = async(status,_id)=>{
                 </div>
               </div>
 
-              <div className="flex-grow text-center md:text-left space-y-2">
-                <div>
-                  <h2 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
+              <div className="flex-grow text-center md:text-left space-y-3 w-full">
+                <div className="space-y-1">
+                  <h2 className="text-xl md:text-2xl font-black text-white group-hover:text-primary transition-colors flex items-center justify-center md:justify-start gap-2">
                     {firstName} {lastName}
+                    {request.fromUserId.isPremium && (
+                      <span className="text-blue-400">
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
+                          <path d="M22.5 12.5c0-1.58-.88-2.95-2.18-3.66.15-.44.22-.91.22-1.4 0-2.43-1.97-4.41-4.4-4.41-.48 0-.95.08-1.4.22C14.03 1.95 12.66 1.07 11.08 1.07c-1.58 0-2.95.88-3.66 2.18-.44-.15-.91-.22-1.4-.22-2.43 0-4.41 1.97-4.41 4.4 0 .48.08.95.22 1.4C.54 9.54-.34 10.92-.34 12.5c0 1.58.88 2.95 2.18 3.66-.15.44-.22.91-.22 1.4 0 2.43 1.97 4.41 4.4 4.41.48 0 .95-.08 1.4-.22 1.05 1.95 2.42 2.82 4.01 2.82 1.58 0 2.95-.88 3.66-2.18.44.15.91.22 1.4.22 2.43 0 4.41-1.97 4.41-4.4 0-.48-.08-.95-.22-1.4 1.3-1.05 2.18-2.42 2.18-4.01zm-14.12 3.12l-3.32-3.32 1.41-1.41 1.91 1.91 4.63-4.63 1.41 1.41-6.04 6.04z" />
+                        </svg>
+                      </span>
+                    )}
                   </h2>
-                  <p className="text-xs text-white/40 font-mono">{email}</p>
+                  <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">{email}</p>
                 </div>
-                <p className="text-sm text-white/60 line-clamp-2 max-w-md italic">
+                <p className="text-sm text-white/60 line-clamp-2 max-w-md italic leading-relaxed mx-auto md:mx-0">
                   "{about || "Hey there! I'd love to connect and talk about tech."}"
                 </p>
-                <div className="flex flex-wrap gap-1 justify-center md:justify-start">
-                  {skills?.slice(0, 3).map((skill, idx) => (
-                    <span key={idx} className="px-2 py-0.5 bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary rounded-md uppercase tracking-wider">
+                <div className="flex flex-wrap gap-1.5 justify-center md:justify-start pt-1">
+                  {skills?.slice(0, 4).map((skill, idx) => (
+                    <span key={idx} className="px-2.5 py-1 bg-primary/5 border border-primary/10 text-[9px] font-black text-primary rounded-lg uppercase tracking-tighter transition-all hover:bg-primary hover:text-white">
                       {skill}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="flex gap-3 w-full md:w-auto">
+              <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto mt-2 md:mt-0">
                 <button 
                   onClick={() => reviewRequest("rejected", request._id)} 
-                  className="flex-1 md:flex-none btn btn-ghost hover:bg-error/20 text-error rounded-2xl px-6 transition-all active:scale-95"
+                  className="flex-1 btn btn-ghost hover:bg-error/20 text-error rounded-2xl px-4 md:px-6 transition-all active:scale-95 text-sm"
                 >
                   Reject
                 </button>
                 <button 
                   onClick={() => reviewRequest("accepted", request._id)} 
-                  className="flex-1 md:flex-none btn btn-primary rounded-2xl px-8 shadow-lg shadow-primary/20 transition-all active:scale-95"
+                  className="flex-1 btn btn-primary rounded-2xl px-4 md:px-8 shadow-lg shadow-primary/20 transition-all active:scale-95 text-sm"
                 >
                   Accept
                 </button>

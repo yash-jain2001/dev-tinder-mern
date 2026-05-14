@@ -13,7 +13,7 @@ const Body = () => {
   const userData = useSelector((store) => store.user);
 
   const fetchUser = async () => {
-    if(userData) return;
+    if (userData) return;
     try {
       const res = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
@@ -29,13 +29,19 @@ const Body = () => {
   };
 
   useEffect(() => {
-      fetchUser();
+    fetchUser();
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col font-sans gradient-bg overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans bg-[#050505] text-white relative overflow-x-hidden">
+      {/* Premium Background Elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/10 blur-[120px] rounded-full animate-pulse"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-secondary/10 blur-[120px] rounded-full animate-pulse delay-700"></div>
+      </div>
+
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 md:px-8 py-6">
+      <main className="grow container mx-auto px-4 md:px-12 py-10 relative z-10">
         <Outlet />
       </main>
       <Footer />
