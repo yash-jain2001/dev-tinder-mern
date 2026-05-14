@@ -46,7 +46,20 @@ const Premium = () => {
         theme: {
           color: "#F37254",
         },
-        handler: verifyPremiumUser,
+        handler: async function (response) {
+          try {
+            const res = await axios.post(
+              BASE_URL + "/payment/verify",
+              response,
+              { withCredentials: true },
+            );
+            if (res.data.isPremium) {
+              setIsUserPremium(true);
+            }
+          } catch (err) {
+            console.error("Verification failed:", err);
+          }
+        },
       };
     const rzp = new window.Razorpay(options);
     rzp.open();

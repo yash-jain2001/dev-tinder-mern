@@ -7,6 +7,7 @@ const membershipAmount = require("../utils/constants");
 const config = require("../config/config");
 const {
   validateWebhookSignature,
+  validatePaymentVerification,
 } = require("razorpay/dist/utils/razorpay-utils");
 const User = require("../models/user");
 
@@ -94,12 +95,49 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
   }
 });
 
-paymentRouter.get("/premium/verify", userAuth, async(req, res)=>{
-  const user = req.user;
-  if(user.isPremium){
-   return res.json({isPremium: true})
+paymentRouter.post("/payment/verify", userAuth, async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+
+    const isVerified = validatePaymentVerification(
+      { order_id: razorpay_order_id, payment_id: razorpay_payment_id },
+      razorpay_signature,
+      config.RAZORPAY_KEY_SECRET,
+    );
+
+    if (!isVerified) {
+      return res.status(400).json({ message: "Payment verification failed" });
+    }
+
+    // Update payment in DB
+    const payment = await Payment.findOne({ orderId: razorpay_order_id });
+    if (payment) {
+      payment.status = "captured";
+      await payment.save();
+    }
+
+    // Update user to premium
+    const user = req.user;
+    user.isPremium = true;
+    // We get the membership type from the original payment record
+    if (payment) {
+      user.membershipType = payment.notes.membershipType;
+    }
+    await user.save();
+
+    res.json({ message: "Payment verified successfully", isPremium: true });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-  return res.json({isPremium: false})
-})
+});
+
+paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
+  const user = req.user;
+  if (user.isPremium) {
+    return res.json({ isPremium: true });
+  }
+  return res.json({ isPremium: false });
+});
 
 module.exports = paymentRouter;
