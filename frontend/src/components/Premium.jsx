@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 
 const Premium = () => {
+  const [isUserPremium, setIsUserPremium] = useState(false);
+
+  const verifyPremiumUser = async () => {
+    try {
+      const res = await axios.get(BASE_URL + "/premium/verify", {
+        withCredentials: true,
+      });
+      if (res.data.isPremium) {
+        setIsUserPremium(true);
+      }
+    } catch (err) {
+      console.error("Error verifying premium status:", err);
+    }
+  };
+
+  useEffect(() => {
+    verifyPremiumUser();
+  }, []);
+
+
   const handleBuyClick = async (type) => {
     const order = await axios.post(
       BASE_URL + "/payment/create",
@@ -24,15 +44,18 @@ const Premium = () => {
           email: notes.email,
         },
         theme: {
-          color: '#F37254'
+          color: "#F37254",
         },
+        handler: verifyPremiumUser,
       };
     const rzp = new window.Razorpay(options);
     rzp.open();
   };
 
   return (
-    <div className="flex gap-10 justify-center py-10 min-h-screen">
+    isUserPremium?<div>You are already a premium user</div>
+
+    :<div className="flex gap-10 justify-center py-10 min-h-screen">
       <div className="w-96 h-[450px] rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl shadow-gray-400/5 p-8 text-white">
         <div className="flex flex-col h-full justify-between">
           <div>
