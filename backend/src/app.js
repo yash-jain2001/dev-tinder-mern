@@ -13,6 +13,10 @@ const compression = require("compression");
 const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config.js");
 const paymentRouter = require("./routes/payment.js");
 require("./utils/cronJob.js");
+const http = require('http');
+const initializeSocket = require("./utils/socket.js");
+
+
 
 app.use(compression());
 app.use(
@@ -52,11 +56,14 @@ app.get("/", (req, res) => {
   res.send("Server is up and running!");
 });
 
+const server = http.createServer(app);
+initializeSocket(server);
+
 connectDB() 
   .then(() => {
     console.log("Database connected");
     const port = PORT || 3000;
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });
   })
