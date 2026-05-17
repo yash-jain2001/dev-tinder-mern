@@ -49,19 +49,20 @@ const Chat = () => {
       targetUserId,
     });
 
-    socket.on("messageRecieved", ({ firstName, text }) => {
-      setMessages((messages) => [...messages, { firstName, text }]);
+    socket.on("messageRecieved", ({ firstName, lastName, text }) => {
+      setMessages((messages) => [...messages, { firstName, lastName, text }]);
     });
 
     return () => {
       socket.disconnect();
     };
-  }, [userId, targetUserId, user?.firstName]);
+  }, [userId, targetUserId, user?.firstName, user?.lastName]);
 
   const sendMessage = () => {
     if (socket) {
       socket.emit("sendMessage", {
         firstName: user?.firstName,
+        lastName: user?.lastName,
         userId,
         targetUserId,
         text: newMessage,
