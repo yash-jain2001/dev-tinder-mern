@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import createSocketConnection from "../utils/socket";
 import { useSelector } from "react-redux";
+import { BASE_URL } from "../utils/constants";
+import axios from "axios";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -18,6 +20,21 @@ const Chat = () => {
   const [socket, setSocket] = useState(null);
   const connections = useSelector((store) => store.connections);
   const targetUser = connections?.find((c) => c._id === targetUserId);
+
+  const fetchChatMessages = async () => {
+    const chat = await axios.get(BASE_URL + `/chat/${targetUserId}`, {
+      withCredentials: true,
+    });
+    console.log(chat.data.messages);
+    const chatMessages = chat.data.messages.map((msg) => {
+      return {firstName:msg.senderId.firstName,lastName:msg.senderId.lastName,text:msg.text};
+    });
+    setMessages(chatMessages);
+  }; 
+
+  useEffect(() => {
+    fetchChatMessages();
+  }, []);
 
   useEffect(() => {
     if (!userId) {
@@ -62,7 +79,7 @@ const Chat = () => {
         </div>
         <div>
           <h1 className="text-xl font-black tracking-tight text-white">
-            {targetUser ? `${targetUser.firstName} ${targetUser.lastName || ""}`.trim() : "Chat Room"}
+            Chat Room
           </h1>
           <div className="flex items-center gap-1.5 mt-0.5">
             <span className="w-2 h-2 rounded-full bg-success animate-pulse"></span>
@@ -81,7 +98,9 @@ const Chat = () => {
           {messages.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center opacity-15 select-none">
               <div className="text-6xl mb-3">💬</div>
-              <p className="text-sm font-semibold tracking-wide">No messages yet</p>
+              <p className="text-sm font-semibold tracking-wide">
+                No messages yet
+              </p>
             </div>
           )}
 
@@ -92,12 +111,18 @@ const Chat = () => {
                 key={idx}
                 className={`chat ${isSender ? "chat-end" : "chat-start"}`}
               >
-                <div className="chat-header text-[11px] font-semibold text-white/40 mb-0.5 px-1">{msg.firstName}</div>
-                <div className={`chat-bubble text-sm shadow-md ${
-                  isSender
-                    ? "bg-primary text-primary-content"
-                    : "bg-base-100/80 text-white/90 border border-white/5"
-                }`}>{msg.text}</div>
+                <div className="chat-header text-[11px] font-semibold text-white/40 mb-0.5 px-1">
+                  {msg.firstName + " " + msg.lastName}
+                </div>
+                <div
+                  className={`chat-bubble text-sm shadow-md ${
+                    isSender
+                      ? "bg-primary text-primary-content"
+                      : "bg-base-100/80 text-white/90 border border-white/5"
+                  }`}
+                >
+                  {msg.text}
+                </div>
               </div>
             );
           })}

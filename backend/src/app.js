@@ -12,6 +12,7 @@ const cors = require("cors");
 const compression = require("compression");
 const { FRONTEND_URL, PORT, NODE_ENV } = require("./config/config.js");
 const paymentRouter = require("./routes/payment.js");
+const chatRouter = require("./routes/chat.js");
 require("./utils/cronJob.js");
 const http = require('http');
 const initializeSocket = require("./utils/socket.js");
@@ -51,6 +52,7 @@ app.use("/",profileRouter);
 app.use("/",requestRouter);
 app.use("/",userRouter);
 app.use("/",paymentRouter);
+app.use("/",chatRouter);
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
