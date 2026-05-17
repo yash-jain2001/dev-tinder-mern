@@ -11,10 +11,19 @@ const getSecretRoomId = (userId, targetUserId) => {
     .digest("hex");
 };
 
+const { FRONTEND_URL } = require("../config/config");
+
 const initializeSocket = (server) => {
+  const allowedOrigins = [
+    FRONTEND_URL ? FRONTEND_URL.replace(/\/$/, "") : null,
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ].filter(Boolean);
+
   const io = socket(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: allowedOrigins,
+      credentials: true,
     },
   });
   io.on("connection", (socket) => {
