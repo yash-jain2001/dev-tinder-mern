@@ -36,7 +36,8 @@ const Login = () => {
         },
       );
       console.log(res.data);
-      dispatch(addUser(res.data));
+      localStorage.setItem("token", res.data.token);
+      dispatch(addUser(res.data.data));
       return navigate("/");
     } catch (err) {
       setError(err.response.data);
@@ -51,6 +52,7 @@ const Login = () => {
         { firstName, lastName, email, password },
         { withCredentials: true },
       );
+      localStorage.setItem("token", res.data.token);
       dispatch(addUser(res.data.data));
       navigate("/profile");
     } catch (err) {

@@ -22,6 +22,7 @@ const Navbar = () => {
           withCredentials: true,
         },
       );
+      localStorage.removeItem("token");
       dispatch(removeUser());
       dispatch(clearFeed());
       dispatch(clearRequests());

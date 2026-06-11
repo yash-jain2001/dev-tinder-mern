@@ -34,7 +34,7 @@ authRouter.post("/signup", async (req, res) => {
       secure: true,
       sameSite: "none",
     });
-    res.json({ message: "User created successfully", data: savedUser });
+    res.json({ message: "User created successfully", data: savedUser, token });
   } catch (err) {
     console.log(err);
     res.status(400).send(`User not created, Error: ${err}`);
@@ -69,7 +69,7 @@ authRouter.post("/login", async (req, res) => {
         secure: true,
         sameSite: "none",
       });
-      res.send(user);
+      res.send({ data: user, token });
     }
   } catch (err) {
     res.status(400).send(err.message);
